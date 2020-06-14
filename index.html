@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap-4.4.1-dist/css/bootstrap.min.css">
+    <script href="jquery.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <a href="#" class="btn btn-success float-right" id="triggermodal">Add Team</a>
+
+                <table class="table" id="leaguetable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Team</th>
+                            <th>P</th>
+                            <th>W</th>
+                            <th>D</th>
+                            <th>L</th>
+                            <th>GF</th>
+                            <th>GA</th>
+                            <th>GD</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- <tr>
+                        <td>1</td>
+                        <td>Gor Mahia</td>
+                        <td>15</td>
+                        <td>8</td>
+                        <td>5</td>
+                        <td>2</td>
+                        <td>22</td>
+                        <td>15</td>
+                        <td>7</td>
+                        <td>29</td>
+                    </tr> -->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!--modal section-->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <div class="modal fade" id="teamModal" tabindex="-1" role="dialog" aria-labelledby="teamModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="teamModalLabel">Kenya Premier League</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <form class="form" id="teamform">
+
+                                    <div class="form-group">
+                                        <label for="team">Team</label>
+                                        <input type="text" id="team" placeholder="Enter team" required class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="matches">Played Matches</label>
+                                        <input type="number" id="matches" placeholder="Enter matches played" required class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="matcheswon">Matches Won</label>
+                                        <input type="number" id="matcheswon" placeholder="Enter matches won" required class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="matchesdrawn">Matches Drawn</label>
+                                        <input type="number" id="matchesdrawn" placeholder="Enter matches drawn" required class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="goalsfor">Goals For</label>
+                                        <input type="number" id="goalsfor" placeholder="Enter goals for" required class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="goalsagainst">Goals Against</label>
+                                        <input type="number" id="goalsagainst" placeholder="Enter goals against" required class="form-control">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success btn-block" id="save">Save</button>
+                                </form>
+
+                            </div>
+
+                            <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> -->
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--end of modal section-->
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+
+            $('#triggermodal').click(function() {
+                $('#teamModal').modal('show');
+            });
+
+
+
+            $('.modal-body').on('submit', '#teamform', function(event) {
+
+
+                var data = [];
+
+                event.preventDefault();
+
+                var team = $('#team').val();
+                var matches = parseInt($('#matches').val());
+                var matcheswon = parseInt($('#matcheswon').val());
+                var matchesdrawn = parseInt($('#matchesdrawn').val());
+                var matcheslost = matches - (matcheswon + matchesdrawn);
+
+                var goalsfor = parseInt($('#goalsfor').val());
+                var goalsagainst = parseInt($('#goalsagainst').val());
+                var goaldifference = goalsfor - goalsagainst;
+                var points = parseInt((matcheswon * 3) + (matchesdrawn * 1));
+
+
+                var markup = "<tr id='" + team + "' data-score='" + team + "-" + points + "'>" +
+                    "<td id='" + team + "-no'>1</td>" +
+                    "<td id='" + team + "-id'>" + team + "</td>" +
+                    "<td id='" + team + "-p'>" + matches + "</td>" +
+                    "<td id='" + team + "-w'>" + matcheswon + "</td>" +
+                    "<td id='" + team + "-d'>" + matchesdrawn + "</td>" +
+                    "<td id='" + team + "-l'>" + matcheslost + "</td>" +
+                    "<td id='" + team + "-gf'>" + goalsfor + "</td>" +
+                    "<td id='" + team + "-ga'>" + goalsagainst + "</td>" +
+                    "<td id='" + team + "-gd'>" + goaldifference + "</td>" +
+                    "<td id='" + team + "-pts'>" + points + "</td>" +
+                    "</tr>";
+
+                //alert(markup);            
+
+                //append or add table row to table
+                $('table tbody').append(markup);
+
+                //loop over every table row
+                $('table tbody tr').each(function() {
+                    var score = $(this).attr('data-score');
+                    var id = $(this).attr('id');
+                    data.push(parseInt(score.replace(id + '-', '')));
+
+                });
+
+                //sort in descending order the total points for all the teams
+                data.sort(function(a, b) {
+                    return b - a
+                });
+
+                //define variable
+                var no = 1;
+                var newmarkup = [];
+                for (i = 0; i < data.length; i++) {
+
+
+                    //loop over table rows again
+                    $('table tbody tr').each(function() {
+                        var getscoreattr = $(this).attr('data-score');
+                        var id = $(this).attr('id')
+                        var getscoresortedattr = id + '-' + data[i];
+                        if (getscoreattr == getscoresortedattr) {
+                            $(this).find('td:eq(0)').text(no++);
+                            newmarkup.push("<tr id='" + id + "' data-score='" + getscoreattr + "'>" + $(this).html() + "</tr>");
+                        }
+
+                    });
+                }
+
+                //remove current rows in table
+                $('table tbody').empty();
+
+                //replace all rows in table
+                for (let i = 0; i < newmarkup.length; i++) {
+                    //append or add table row to table
+                    $('table tbody').append(newmarkup[i]);
+                }
+
+                //show table rows
+                $('table tbody').show();
+
+                //reset form
+                $('#teamform').trigger("reset");
+                data = [];
+
+                $('#teamModal').modal('hide');
+
+                return false;
+            });
+
+        });
+    </script>
+
+</body></html>
